@@ -37,6 +37,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #include "create_msgs/msg/define_song.hpp"
 #include "create_msgs/msg/play_song.hpp"
 #include "create_msgs/msg/motor_setpoint.hpp"
+#include "create_msgs/msg/clean_mode.hpp"
 
 #include "create/create.h"
 
@@ -82,6 +83,7 @@ private:
   rclcpp::Subscription<create_msgs::msg::MotorSetpoint>::SharedPtr side_brush_motor_sub_;
   rclcpp::Subscription<create_msgs::msg::MotorSetpoint>::SharedPtr main_brush_motor_sub_;
   rclcpp::Subscription<create_msgs::msg::MotorSetpoint>::SharedPtr vacuum_motor_sub_;
+  rclcpp::Subscription<create_msgs::msg::CleanMode>::SharedPtr clean_mode_sub_;
 
   rclcpp::Publisher<nav_msgs::msg::Odometry>::SharedPtr odom_pub_;
   rclcpp::Publisher<std_msgs::msg::Empty>::SharedPtr clean_btn_pub_;
@@ -104,6 +106,7 @@ private:
   rclcpp::Publisher<sensor_msgs::msg::JointState>::SharedPtr wheel_joint_pub_;
   rclcpp::Publisher<create_msgs::msg::Cliff>::SharedPtr cliff_pub_;
   rclcpp::Publisher<std_msgs::msg::UInt8>::SharedPtr dirt_detect_pub_;
+
 
   rclcpp::TimerBase::SharedPtr loop_timer_;
 
@@ -145,6 +148,7 @@ private:
   void setASCIICallback(std_msgs::msg::UInt8MultiArray::UniquePtr msg);
   void dockCallback(std_msgs::msg::Empty::UniquePtr msg);
   void undockCallback(std_msgs::msg::Empty::UniquePtr msg);
+  void cleanModeCallback(create_msgs::msg::CleanMode::UniquePtr msg);
   void defineSongCallback(create_msgs::msg::DefineSong::UniquePtr msg);
   void playSongCallback(create_msgs::msg::PlaySong::UniquePtr msg);
   void sideBrushMotor(create_msgs::msg::MotorSetpoint::UniquePtr msg);

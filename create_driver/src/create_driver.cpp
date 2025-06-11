@@ -132,6 +132,9 @@ CreateDriver::CreateDriver()
     "dock", 10, std::bind(&CreateDriver::dockCallback, this, std::placeholders::_1));
   undock_sub_ = create_subscription<std_msgs::msg::Empty>(
     "undock", 10, std::bind(&CreateDriver::undockCallback, this, std::placeholders::_1));
+  clean_mode_sub_ = create_subscription<create_msgs::msg::CleanMode>(
+    "set_clean_mode", 10, std::bind(&CreateDriver::cleanModeCallback, this, std::placeholders::_1));
+
   define_song_sub_ = create_subscription<create_msgs::msg::DefineSong>(
     "define_song", 10, std::bind(&CreateDriver::defineSongCallback, this, std::placeholders::_1));
   play_song_sub_ = create_subscription<create_msgs::msg::PlaySong>(
@@ -226,6 +229,42 @@ void CreateDriver::powerLEDCallback(std_msgs::msg::UInt8MultiArray::UniquePtr ms
     robot_->setPowerLED(msg->data[0]);
   } else {
     robot_->setPowerLED(msg->data[0], msg->data[1]);
+  }
+}
+
+void CreateDriver::cleanModeCallback(create_msgs::msg::CleanMode::UniquePtr msg)
+{
+  switch(msg->mode){
+    case 0:
+      if (robot_->setMode(create::CreateMode::MODE_SAFE)){
+        RCLCPP_INFO(this->get_logger(), "[CREATE] Stopping Cleaning Mode");
+      } else {
+        RCLCPP_ERROR(this->get_logger(), "[CREATE] Failed to stop cleaning mode");
+      }
+      break;
+    case 1:
+      if (robot_->clean(create::CleanMode::CLEAN_DEFAULT)){
+        RCLCPP_INFO(this->get_logger(), "[CREATE] Starting Cleaning Mode");
+      } else {
+        RCLCPP_ERROR(this->get_logger(), "[CREATE] Failed to start cleaning mode");
+      }
+      break;
+    case 2:
+      if (robot_->clean(create::CleanMode::CLEAN_MAX)){
+        RCLCPP_INFO(this->get_logger(), "[CREATE] Starting Max Cleaning Mode");
+      } else {
+        RCLCPP_ERROR(this->get_logger(), "[CREATE] Failed to start max cleaning mode");
+      }
+      break;
+    case 3:
+      if (robot_->clean(create::CleanMode::CLEAN_SPOT)){
+        RCLCPP_INFO(this->get_logger(), "[CREATE] Starting Spot Cleaning Mode");
+      } else {
+        RCLCPP_ERROR(this->get_logger(), "[CREATE] Failed to start spot cleaning mode");
+      }
+      break;
+    default:
+      RCLCPP_ERROR(this->get_logger(), "[CREATE] Invalid cleaning mode: %d", msg->mode);
   }
 }
 
