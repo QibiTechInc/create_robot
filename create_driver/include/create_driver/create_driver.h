@@ -50,6 +50,7 @@ POSSIBILITY OF SUCH DAMAGE.
 #include "std_msgs/msg/empty.hpp"
 #include "std_msgs/msg/float32.hpp"
 #include "std_msgs/msg/int16.hpp"
+#include "std_msgs/msg/u_int8.hpp"
 #include "std_msgs/msg/u_int16.hpp"
 #include "std_msgs/msg/u_int8_multi_array.hpp"
 #include "tf2_ros/transform_broadcaster.h"
@@ -102,6 +103,7 @@ private:
   rclcpp::Publisher<std_msgs::msg::Empty>::SharedPtr wheeldrop_pub_;
   rclcpp::Publisher<sensor_msgs::msg::JointState>::SharedPtr wheel_joint_pub_;
   rclcpp::Publisher<create_msgs::msg::Cliff>::SharedPtr cliff_pub_;
+  rclcpp::Publisher<std_msgs::msg::UInt8>::SharedPtr dirt_detect_pub_;
 
   rclcpp::TimerBase::SharedPtr loop_timer_;
 
@@ -113,6 +115,7 @@ private:
   create_msgs::msg::ChargingState charging_state_msg_;
   create_msgs::msg::Bumper bumper_msg_;
   create_msgs::msg::Cliff cliff_msg_;
+  std_msgs::msg::UInt8 dirt_msg_;
   nav_msgs::msg::Odometry odom_msg_;
   geometry_msgs::msg::TransformStamped tf_odom_;
   rclcpp::Time last_cmd_vel_time_;
@@ -163,6 +166,7 @@ private:
   void publishBumperInfo();
   void publishWheeldrop();
   void publishCliff();
+  void publishDirt();
 
 public:
   CreateDriver();

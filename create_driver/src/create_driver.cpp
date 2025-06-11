@@ -157,6 +157,7 @@ CreateDriver::CreateDriver()
   charge_ratio_pub_ = create_publisher<std_msgs::msg::Float32>("battery/charge_ratio", 30);
   capacity_pub_ = create_publisher<std_msgs::msg::Float32>("battery/capacity", 30);
   temperature_pub_ = create_publisher<std_msgs::msg::Int16>("battery/temperature", 30);
+  dirt_detect_pub_ = create_publisher<std_msgs::msg::UInt8>("dirt_detect", 30);
   charging_state_pub_ = create_publisher<create_msgs::msg::ChargingState>("battery/charging_state", 30);
   omni_char_pub_ = create_publisher<std_msgs::msg::UInt16>("ir_omni", 30);
   mode_pub_ = create_publisher<create_msgs::msg::Mode>("mode", 30);
@@ -319,6 +320,7 @@ bool CreateDriver::update()
   publishBumperInfo();
   publishWheeldrop();
   publishCliff();
+  publishDirt();
 
   // If last velocity command was sent longer than latch duration, stop robot
   if (last_cmd_vel_time_.nanoseconds() == 0 || now() - last_cmd_vel_time_ >= latch_duration_) {
@@ -640,6 +642,11 @@ void CreateDriver::publishCliff()
   cliff_msg_.is_cliff_right = robot_->isCliffRight();
   cliff_msg_.is_cliff_front_right = robot_->isCliffFrontRight();
   cliff_pub_->publish(cliff_msg_);
+}
+
+void CreateDriver::publishDirt(){
+  dirt_msg_.data = robot_->getDirtDetect();
+  dirt_detect_pub_->publish(dirt_msg_);
 }
 
 void CreateDriver::spinOnce()
