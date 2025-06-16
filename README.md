@@ -39,7 +39,7 @@ _* Not verified. Anyone who is able to verify that this driver works or not is e
 |-------------------|---------------|
 |  Odometry         | Available     |
 |  Safe mode        | Planned [#13](https://github.com/AutonomyLab/create_robot/issues/13) |
-|  Clean demo       | Planned [#14](https://github.com/AutonomyLab/create_robot/issues/14) |
+|  Clean demo       | Available     |
 |  Dock demo        | Available     |
 |  Drive wheels     | N/A           |
 |  Drive (v,w)      | Available     |
@@ -103,10 +103,10 @@ $ sudo apt install python3-rosdep python3-colcon-common-extensions
 #### USB Permissions
 5. In order to connect to Create over USB, ensure your user is in the dialout group
     ``` bash
-    $ sudo usermod -a -G dialout $USER
+    $ sudo cp udev/*.rules /etc/udev/rules.d/
+    $ sudo udevadm control --reload-rules
+    $ sudo udevadm trigger
     ```
-
-6. Logout and login for permission to take effect
 
 ## Running the driver
 
@@ -154,7 +154,7 @@ $ ros2 launch create_bringup create_2.launch config:=/abs/path/to/config.yaml de
 
  Name         |  Description |  Default
 --------------|--------------|----------
-`dev`         |  Device path of robot |  `/dev/ttyUSB0`
+`dev`         |  Device path of robot |  `/dev/ROOMBA`
 `base_frame`  |  The robot's base frame ID | `base_footprint`
 `odom_frame`  |  The robot's odometry frame ID | `odom`
 `latch_cmd_duration` | If this many seconds passes without receiving a velocity command the robot stops | `0.2`
@@ -206,7 +206,8 @@ Topic       | Description   | Type
 `dock` | Activates the demo docking behaviour. Robot enters _Passive_ mode meaning the user loses control (See [OI Spec][oi_spec]) | [std_msgs/msg/Empty][empty]
 `undock` | Switches robot to _Full_ mode giving control back to the user | [std_msgs/msg/Empty][empty]
 `define_song` | Define a song with up to 16 notes. Each note is described by a MIDI note number and a float32 duration in seconds. The longest duration is 255/64 seconds. You can define up to 4 songs (See [OI Spec][oi_spec]) | [create_msgs/msg/DefineSong][definesong_msg]
-`play_song` | Play a predefined song | [create_msgs/msg/PlaySong][playsong_msg]
+`play_song` | Play a predefined song | [create_msgs/msg/PlaySong][playsong_msg]  
+`set_clean_mode` | Set the cleaning mode | [create_msgs/msg/CleanMode][cleanmode_msg]  
 
 ## Commanding your Create
 
@@ -268,3 +269,4 @@ Contributing to the development and maintenance of _create\_autonomy_ is encoura
 [jointstate_msg]:  https://docs.ros2.org/foxy/api/sensor_msgs/msg/JointState.html
 [definesong_msg]:  https://github.com/AutonomyLab/create_robot/blob/foxy/create_msgs/msg/DefineSong.msg
 [playsong_msg]:  https://github.com/AutonomyLab/create_robot/blob/foxy/create_msgs/msg/PlaySong.msg
+[cleanmode_msg]:  https://github.com/QibitechInc/create_robot/blob/iron/create_msgs/msg/CleanMode.msg
