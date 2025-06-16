@@ -50,7 +50,7 @@ _* Not verified. Anyone who is able to verify that this driver works or not is e
 |  Wheeldrop        | Available     |
 |  Bumpers          | Available     |
 |  Cliff sensor     | Available     |
-|  Dirt detect      | N/A           |
+|  Dirt detect      | Available     |
 |  Omni IR sensor   | Available     |
 |  Left IR sensor   | N/A           |
 |  Right IR sensor  | N/A           |
@@ -176,7 +176,8 @@ $ ros2 launch create_bringup create_2.launch config:=/abs/path/to/config.yaml de
  `battery/temperature` | The temperature of the robot's battery (degrees Celsius) | [std_msgs/msg/Int16][int16]
  `battery/voltage` | Voltage of the robot's battery (V) | [std_msgs/msg/Float32][float32]
  `bumper` | Bumper state message (including light sensors on bumpers) | [create_msgs/msg/Bumper][bumper_msg]
- `cliff` | Cliff state message | [create_msgs/msg/Cliff][cliff_msg]
+ `cliff` | Cliff state message | [create_msgs/msg/Cliff][cliff_msg]  
+ `dirt_detect` | Dirt detect state message. This only works when sucking the dirt to the vacuum | [std_msgs/msg/UInt8][uint8]  
  `clean_button` | 'clean' button is pressed ('play' button for Create 1) | [std_msgs/msg/Empty][empty]
  `day_button` |  'day' button is pressed | [std_msgs/msg/Empty][empty]
  `hour_button` | 'hour' button is pressed | [std_msgs/msg/Empty][empty]
@@ -256,6 +257,7 @@ Contributing to the development and maintenance of _create\_autonomy_ is encoura
 [odometry]:  https://docs.ros2.org/foxy/api/nav_msgs/msg/Odometry.html
 [empty]:  https://docs.ros2.org/foxy/api/std_msgs/msg/Empty.html
 [uint16]:  https://docs.ros2.org/foxy/api/std_msgs/msg/UInt16.html
+[uint8]:  https://docs.ros2.org/foxy/api/std_msgs/msg/UInt8.html
 [int16]:  https://docs.ros2.org/foxy/api/std_msgs/msg/Int16.html
 [twist]:  https://docs.ros2.org/foxy/api/geometry_msgs/msg/Twist.html
 [bool]:  https://docs.ros2.org/foxy/api/std_msgs/msg/Bool.html
